@@ -1,0 +1,354 @@
+---
+title: "<h3>MSDS660 - Week 1: Basic Concepts<br></h3>"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+---
+<h4>Christy Pearson<br>May 12, 2018</h4>
+<br>
+<h5>This week's assignment is a Lab exercise to verify our R/RStudio setup and pratice working with R notebooks.</h5>
+<br>
+Preparing the current environment
+```{r}
+rm(list = ls()) # Prevents results from previous runs being carried over into new runs.
+graphics.off()  # Clears the graphic plots window
+cat("\014")     # Clears the console
+
+setwd("C:/Users/Creat/OneDrive/Documents/MSDS660/Week 1")
+getwd()
+```
+Package Installations
+```{r}
+# https://stackoverflow.com/questions/34739681/unable-to-move-temporary-installation-when-installing-dependency-packages-in-r/44256437#44256437
+# Sometimes needed when "cannot move temporary installation" error
+#debug(utils:::unpackPkgZip) 
+
+# Packages for this rmd
+# install.packages('sampling')
+```
+Lab Exercises:<br><br>
+Assigning vectors
+```{r}
+# create a function of numbers
+x <- c(1,2,3,5)
+x
+```
+```{r}
+# using '=' to store values rather than '<-'
+x = c(1,6,2)
+x
+y = c(1,4,3)
+y
+```
+Functions and Matrices
+```{r}
+# length() function
+length(x)
+length(y)
+```
+```{r}
+# adding the two vectors togther
+x+y
+```
+```{r}
+# ls() and rm() functions
+ls()
+rm(x,y)
+ls()
+```
+```{r}
+# it is possible to combine ls() and rm()
+x = c(1,6,2)
+x
+y = c(1,4,3)
+y
+rm(list=ls())
+ls()
+```
+```{r}
+# matrix() function
+?matrix  #opens up the R documentation within RStudio
+
+# time to create a matrix
+x = matrix(data=c(1,2,3,4), nrow=2,ncol=2)
+x
+```
+```{r}
+# another way to create the same matrix
+x = matrix(c(1,2,3,4),2,2)
+x
+```
+```{r}
+# add the byrow operator to load the matrix based on rows and not columns
+y <- matrix(c(1,2,3,4), 2, 2, byrow=TRUE)
+y
+```
+Notice the difference between matrix x and y.(Hint: look at where values '2' and'3' are placed)<br><br>
+Statistical Functions
+```{r}
+# sqrt() and exponent functions
+sqrt(x)
+x^2
+
+```
+Note: we didn't reassign the values of x, we just used them in our calculations
+```{r}
+# rnorm() and cor() functions
+# rnorm()- generates a vector of random normal variables
+x = rnorm(50)
+# cor() - correlated set of numbers
+y=x+rnorm(50, mean=50, sd=.1)
+cor(x,y)
+```
+```{r}
+# use set.seed whenever performing calculations involving random quantities
+set.seed(1303)
+rnorm(50)
+```
+```{r}
+# functions mean(), var(), sd()
+set.seed(3)
+y=rnorm(100)
+mean(y)
+```
+```{r}
+var(y)
+```
+```{r}
+sqrt(var(y))
+```
+```{r}
+sd(y)
+```
+Graphics
+```{r}
+# plot()
+x = rnorm(100)
+y = rnorm(100)
+plot(x,y)
+```
+```{r}
+# Now let's make is pretty
+plot(x,y,xlab="x-axis",ylab="y-axis",main="Plot of X vs Y")
+```
+```{r}
+# saving the output of a R plot: functions pdf() and jpeg()
+pdf("Figure.pdf")
+plot(x,y,col="green")
+dev.off()
+```
+The pdf was written tot he wroking directory that we specified above. Also note the dev.off() is a way to tell R that we are done with the plot()
+```{r}
+# seq() function
+x = seq(1,10)
+x
+```
+```{r}
+# here's another way
+x=1:10
+x
+```
+```{r}
+# fancier sequence
+x = seq(-pi,pi,length=50)
+x
+```
+```{r}
+# time to create some sophisticated plots with all of this
+# contour() function - topographical map plotting with three arguments
+# 1) a vector of x values
+# 2) a vector of y values
+# 3) a matrix whose elements correspond to the z value for each (x,y)
+y=x
+f=outer(x,y,function(x,y)cos(y)/(1+x^2))
+contour(x,y,f)
+contour(x,y,f,nlevels=45,add=T)
+```
+```{r}
+# another contour plot
+fa=(f-t(f))/2
+contour(x,y,fa,nlevels=15)
+```
+```{r}
+# function image()- works the same as contour() except it produces a heat map.
+# a heat map is a plot where the z value is represented by a code coded plot
+image(x,y,fa)
+```
+```{r}
+# function persp() - used to produce a three dimensional map
+persp(x,y,fa)
+```
+```{r}
+# slightly different view
+persp(x,y,fa,theta=30)
+```
+```{r}
+# slightly different view
+persp(x,y,fa,theta=30,phi=20)
+```
+```{r}
+# slightly different view
+persp(x,y,fa,theta=30,phi=70)
+```
+```{r}
+# slightly different view
+persp(x,y,fa,theta=30,phi=40)
+```
+Indexing Data
+```{r}
+# indexing data
+A = matrix(1:16,4,4)
+A
+```
+```{r}
+# retrieve one element of A
+A[2,3]
+```
+```{r}
+# select a sub matrix
+A[c(1,3),c(2,4)]
+```
+```{r}
+# another sub matrix
+A[1:3,2:4]
+```
+```{r}
+# another sub matrix - specific rows
+A[1:2,]
+```
+```{r}
+# another sub matrix - specific columns
+A[,1:2]
+```
+```{r}
+# another sub matrix
+A[1,]
+```
+```{r}
+# another sub matrix using the '-' command
+A[-c(1,3),]
+```
+```{r}
+# last of the matrices
+A[-c(1,3),-c(1,3,4)]
+```
+```{r}
+# dim() function
+dim(A)
+```
+Loading Data
+```{r}
+# load the Auto.data file
+Auto=read.table("http://www-bcf.usc.edu/~gareth/ISL/Auto.data")
+fix(Auto)
+```
+The output from the fix() command opens in a seperate window. Not sure how to make it open in here.
+```{r}
+# what about the header
+Auto=read.table("http://www-bcf.usc.edu/~gareth/ISL/Auto.data", header=T, na.strings="?")
+fix(Auto)
+```
+The output from the fix() command opens in a seperate window. Not sure how to make it open in here.
+```{r}
+# loading from the csv
+Auto=read.csv("http://www-bcf.usc.edu/~gareth/ISL/Auto.csv", header=T, na.strings="?")
+fix(Auto)
+```
+The output from the fix() command opens in a seperate window. Not sure how to make it open in here.
+
+```{r}
+# look at some of the data particulars
+dim(Auto)
+Auto[1:4,]
+```
+```{r}
+# na.omit() - handle missing observations
+Auto=na.omit(Auto)
+dim(Auto)
+```
+cleaned up 5 rows of missing data
+```{r}
+# column names
+names(Auto)
+```
+Graphical and nemerical Summaries
+```{r}
+# plot the cylinder vs mpg of the Auto dataset
+plot(cylinders, mpg)
+```
+The error is because R doesn't know where to find cylinders and mpg. Need to specify the dataset
+```{r}
+# plot the cylinder vs mpg of the Auto dataset
+plot(Auto$cylinders, Auto$mpg)
+```
+```{r}
+# alternatively, use the attach() function
+attach(Auto)
+plot(cylinders, mpg)
+```
+```{r}
+# convert cylinder from vector to factor
+cylinders <- as.factor(cylinders)
+
+# now plot cylinders vs mpg
+plot(cylinders, mpg)
+```
+```{r}
+# another plot
+plot(cylinders, mpg, col="red")
+```
+```{r}
+# another plot
+plot(cylinders, mpg, col="red",varwidth=T)
+```
+```{r}
+# another plot
+plot(cylinders, mpg, col="red",varwidth=T,horizontal=T)
+```
+```{r}
+# another plot
+plot(cylinders, mpg, col="red",varwidth=T, xlab="cylinders", ylab="mpg")
+```
+```{r}
+# hist() to make a histogram
+hist(mpg)
+```
+```{r}
+# another histogram
+hist(mpg,col=2)
+```
+```{r}
+# another histogram
+hist(mpg,col=2,breaks=15)
+```
+```{r}
+# paris() function
+pairs(Auto)
+```
+Those are hard to read
+```{r}
+# pairs() one more time
+pairs(~ mpg+displacement+horsepower+weight+acceleration,Auto)
+```
+That's a little better
+```{r}
+# identify() function - will identify the value of a given point
+plot(horsepower,mpg)
+identify(horsepower,mpg,name)
+```
+I couldn't get the identify() to work in the notebook.   However, I did in an R script.   I'll attach that the the project submission too.
+```{r}
+# summary() function
+summary(Auto)
+```
+```{r}
+# for one element
+summary(mpg)
+```
+```{r}
+# other commands
+#savehistory()
+#loadhistory()
+```
+

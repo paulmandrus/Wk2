@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container-fluid main-container">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="fluid-row">
+
+<div class="btn-group pull-right">
+<span>Code</span> <span class="caret"></span>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a rel="noopener" href="#">Show All Code</a></li>
+<li><a rel="noopener" href="#">Hide All Code</a></li>
+<li class="divider"></li>
+<li><a rel="noopener" href="#">Download Rmd</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Week 2 Lab: Linear Regression using R</h1>
+
+</div>
+
+
+
+<h3>
+Ben Altland<br/> MSDS - 660 Statistical Methods and Experimental Design<br/> 23 May 2018
+</h3>
+<h4>
+In this exercise, I’ll perform simple linear regression using the Boston data set from the MASS package.
+</h4>
+
+
+
+<pre class="r"><code>rm(list = ls()) # Removes all objects to prevent results from previous runs being carried over into new runs.
+graphics.off()  # Clears the graphic plots window
+cat(&quot;\014&quot;)     # Clears the console</code></pre>
+
+<p> </p>
+<pre class="r"><code>setwd(&quot;C:/users/ben/Desktop/MSDS/660 - Statistical Methods and Experimental Design/Assignments/Week 2&quot;)</code></pre>
+
+
+
+<h3>
+Describe and explore the Boston data set:
+</h3>
+<p>First, I’ll call the MASS library, load the Boston data set, and examine the structure</p>
+
+
+
+<pre class="r"><code>install.packages(&quot;MASS&quot;)</code></pre>
+
+
+<pre><code>Installing package into &lt;U+393C&gt;&lt;U+3E31&gt;C:/Users/ben/Documents/R/win-library/3.4&lt;U+393C&gt;&lt;U+3E32&gt;
+(as &lt;U+393C&gt;&lt;U+3E31&gt;lib&lt;U+393C&gt;&lt;U+3E32&gt; is unspecified)
+trying URL &#39;https://cran.rstudio.com/bin/windows/contrib/3.4/MASS_7.3-50.zip&#39;
+Content type &#39;application/zip&#39; length 1170469 bytes (1.1 MB)
+downloaded 1.1 MB</code></pre>
+
+
+<pre><code>package MASS successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+    C:\Users\ben\AppData\Local\Temp\RtmpEP3ahu\downloaded_packages</code></pre>
+
+
+<pre class="r"><code>library(MASS)
+data(Boston)
+str(Boston)</code></pre>
+
+
+<pre><code>&#39;data.frame&#39;:   506 obs. of  14 variables:
+ $ crim   : num  0.00632 0.02731 0.02729 0.03237 0.06905 ...
+ $ zn     : num  18 0 0 0 0 0 12.5 12.5 12.5 12.5 ...
+ $ indus  : num  2.31 7.07 7.07 2.18 2.18 2.18 7.87 7.87 7.87 7.87 ...
+ $ chas   : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ nox    : num  0.538 0.469 0.469 0.458 0.458 0.458 0.524 0.524 0.524 0.524 ...
+ $ rm     : num  6.58 6.42 7.18 7 7.15 ...
+ $ age    : num  65.2 78.9 61.1 45.8 54.2 58.7 66.6 96.1 100 85.9 ...
+ $ dis    : num  4.09 4.97 4.97 6.06 6.06 ...
+ $ rad    : int  1 2 2 3 3 3 5 5 5 5 ...
+ $ tax    : num  296 242 242 222 222 222 311 311 311 311 ...
+ $ ptratio: num  15.3 17.8 17.8 18.7 18.7 18.7 15.2 15.2 15.2 15.2 ...
+ $ black  : num  397 397 393 395 397 ...
+ $ lstat  : num  4.98 9.14 4.03 2.94 5.33 ...
+ $ medv   : num  24 21.6 34.7 33.4 36.2 28.7 22.9 27.1 16.5 18.9 ...</code></pre>
+
+
+<pre class="r"><code>head(Boston)</code></pre>
+
+
+<div>
+
+</div>
+
+
+
+<p>Using the str() command, we can see that this data set contains 506 observations of 14 different variables. The abbreviations for these variable column names don’t explicitly indicate what they’re measuring, so I examined the help file for this data set. From this, I see the full title of the data set “Housing Values in the Suburbs of Boston” and it appears as though the variables measure different factors for each suburban area that may or may not have a correlation with housing values as indicated in the title of the data set.</p>
+
+
+
+<pre class="r"><code>help(Boston)</code></pre>
+
+
+
+<p>Referencing the following descriptions in the help file, I selected the following 4 variables to examine correlation, using the median value of homes as my response variable and the other 3 as my predictor variables.</p>
+<ol style="list-style-type: decimal;">
+<li>medv median value of owner-occupied homes in $1000s.</li>
+<li>age proportion of owner-occupied units built prior to 1940.</li>
+<li>crim per capita crime rate by town.</li>
+<li>rm average number of rooms per dwelling.</li>
+</ol>
+
+
+
+<pre class="r"><code>pairs( ~ medv + age + crim + rm, Boston)</code></pre>
+
+
+<p><img src="javascript://"/></p>
+
+
+
+<h3>
+Select 2 variables for simple linear regression
+</h3>
+<p>From a visual examination, it appears that there’s a positive correlation between median home value and average number of rooms per dwelling. Let’s plot just these 2 variables and calculate the correlation value:</p>
+
+
+
+<pre class="r"><code>plot(Boston$rm, Boston$medv, xlab=&quot;Avg No. Rooms per Dwelling&quot;, ylab=&quot;Median Home Value in $1000s&quot;)</code></pre>
+
+
+<p><img src="javascript://"/></p>
+
+
+<pre class="r"><code>cor(Boston$rm, Boston$medv)</code></pre>
+
+
+<pre><code>[1] 0.6953599</code></pre>
+
+
+
+<h4>
+Hypothesis Test
+</h4>
+<p>The null hypothesis here is that Average Number of Rooms per Dwelling is not a predictor of Median Home Value. The alternative hypothesis here is that Average Number of Rooms per Dwelling is a reasonable predictor of Median Home Value. Using a 95% confidence interval, we’ll reject the null hypothesis if the model’s p-value is less than 0.05, and accept the null hypothesis if the p-value is greater than 0.05</p>
+<h4>
+Create a linear regression model using the lm() function
+</h4>
+
+
+
+<pre class="r"><code>value.rooms.model &lt;- lm(medv ~ rm, Boston)
+value.rooms.model</code></pre>
+
+
+<pre><code>
+Call:
+lm(formula = medv ~ rm, data = Boston)
+
+Coefficients:
+(Intercept)           rm  
+    -34.671        9.102  </code></pre>
+
+
+<pre class="r"><code>summary(value.rooms.model)</code></pre>
+
+
+<pre><code>
+Call:
+lm(formula = medv ~ rm, data = Boston)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-23.346  -2.547   0.090   2.986  39.433 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  -34.671      2.650  -13.08   &lt;2e-16 ***
+rm             9.102      0.419   21.72   &lt;2e-16 ***
+---
+Signif. codes:  0 *** 0.001 ** 0.01 * 0.05 . 0.1   1
+
+Residual standard error: 6.616 on 504 degrees of freedom
+Multiple R-squared:  0.4835,    Adjusted R-squared:  0.4825 
+F-statistic: 471.8 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
+
+
+
+<p>Note that the r squared value of 0.4835 indicates there is a relationship between these 2 variables because it is not close to 0, and the p-value being less than 0.05 indicates a relationship at 95% confidence and we can reject the null hypothesis. Now let’s plot the best-fit line for our model on top of the scatterplot.</p>
+
+
+
+<pre class="r"><code>plot(Boston$rm, Boston$medv, xlab=&quot;Avg No. Rooms per Dwelling&quot;, ylab=&quot;Median Home Value in $1000s&quot;)
+abline(value.rooms.model, col=&quot;red&quot;)</code></pre>
+
+
+<p><img src="javascript://"/></p>
+
+
+
+<h4>
+Analysis
+</h4>
+<p>While there does appear to be a significant linear relationship between number of rooms and home value, there is a relatively large residual standard error of 6.616, meaning that there’s significant variance in the predicted median value of homes in the model. I think this is a result of the data for both variables lacking normality in distribution, as indicated below by the p-values being less than 0.05 for the Shapiro-Wilk normality test.</p>
+
+
+
+<pre class="r"><code>shapiro.test(Boston$medv)</code></pre>
+
+
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  Boston$medv
+W = 0.91718, p-value = 4.941e-16</code></pre>
+
+
+<pre class="r"><code>shapiro.test(Boston$rm)</code></pre>
+
+
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  Boston$rm
+W = 0.96087, p-value = 2.412e-10</code></pre>
+
+
+
+<h4>
+Conclusions
+</h4>
+<p>Another problem with this model would be in the prediction of a median home value near $0 or less for average room #s less than ~4.2. For example, this model would fail at predicting home values for 2 and 3 room homes. In conclusion, the relationship between these 2 variables is not strong but is not weak either, and number of rooms is a moderate predictor of home value subject to a relatively high standard error in both directions.</p>
+
+
+<div>LS0tDQp0aXRsZTogIldlZWsgMiBMYWI6IExpbmVhciBSZWdyZXNzaW9uIHVzaW5nIFIiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KPGgzPkJlbiBBbHRsYW5kPGJyPg0KTVNEUyAtIDY2MCBTdGF0aXN0aWNhbCBNZXRob2RzIGFuZCBFeHBlcmltZW50YWwgRGVzaWduPGJyPiANCjIzIE1heSAyMDE4PC9oMz4NCg0KPGg0PkluIHRoaXMgZXhlcmNpc2UsIEknbGwgcGVyZm9ybSBzaW1wbGUgbGluZWFyIHJlZ3Jlc3Npb24gdXNpbmcgdGhlIEJvc3RvbiBkYXRhIHNldCBmcm9tIHRoZSBNQVNTIHBhY2thZ2UuPC9oND4NCg0KYGBge3J9DQpybShsaXN0ID0gbHMoKSkgIyBSZW1vdmVzIGFsbCBvYmplY3RzIHRvIHByZXZlbnQgcmVzdWx0cyBmcm9tIHByZXZpb3VzIHJ1bnMgYmVpbmcgY2FycmllZCBvdmVyIGludG8gbmV3IHJ1bnMuDQpncmFwaGljcy5vZmYoKSAgIyBDbGVhcnMgdGhlIGdyYXBoaWMgcGxvdHMgd2luZG93DQpjYXQoIlwwMTQiKSAgICAgIyBDbGVhcnMgdGhlIGNvbnNvbGUNCnNldHdkKCJDOi91c2Vycy9iZW4vRGVza3RvcC9NU0RTLzY2MCAtIFN0YXRpc3RpY2FsIE1ldGhvZHMgYW5kIEV4cGVyaW1lbnRhbCBEZXNpZ24vQXNzaWdubWVudHMvV2VlayAyIikNCmBgYA0KDQo8aDM+RGVzY3JpYmUgYW5kIGV4cGxvcmUgdGhlIEJvc3RvbiBkYXRhIHNldDo8L2gzPg0KDQpGaXJzdCwgSSdsbCBjYWxsIHRoZSBNQVNTIGxpYnJhcnksIGxvYWQgdGhlIEJvc3RvbiBkYXRhIHNldCwgYW5kIGV4YW1pbmUgdGhlIHN0cnVjdHVyZQ0KYGBge3J9DQppbnN0YWxsLnBhY2thZ2VzKCJNQVNTIikNCmxpYnJhcnkoTUFTUykNCmRhdGEoQm9zdG9uKQ0Kc3RyKEJvc3RvbikNCmhlYWQoQm9zdG9uKQ0KYGBgDQoNClVzaW5nIHRoZSBzdHIoKSBjb21tYW5kLCB3ZSBjYW4gc2VlIHRoYXQgdGhpcyBkYXRhIHNldCBjb250YWlucyA1MDYgb2JzZXJ2YXRpb25zIG9mIDE0IGRpZmZlcmVudCB2YXJpYWJsZXMuICBUaGUgYWJicmV2aWF0aW9ucyBmb3IgdGhlc2UgdmFyaWFibGUgY29sdW1uIG5hbWVzIGRvbid0IGV4cGxpY2l0bHkgaW5kaWNhdGUgd2hhdCB0aGV5J3JlIG1lYXN1cmluZywgc28gSSBleGFtaW5lZCB0aGUgaGVscCBmaWxlIGZvciB0aGlzIGRhdGEgc2V0LiAgRnJvbSB0aGlzLCBJIHNlZSB0aGUgZnVsbCB0aXRsZSBvZiB0aGUgZGF0YSBzZXQgIkhvdXNpbmcgVmFsdWVzIGluIHRoZSBTdWJ1cmJzIG9mIEJvc3RvbiIgYW5kIGl0IGFwcGVhcnMgYXMgdGhvdWdoIHRoZSB2YXJpYWJsZXMgbWVhc3VyZSBkaWZmZXJlbnQgZmFjdG9ycyBmb3IgZWFjaCBzdWJ1cmJhbiBhcmVhIHRoYXQgbWF5IG9yIG1heSBub3QgaGF2ZSBhIGNvcnJlbGF0aW9uIHdpdGggaG91c2luZyB2YWx1ZXMgYXMgaW5kaWNhdGVkIGluIHRoZSB0aXRsZSBvZiB0aGUgZGF0YSBzZXQuDQoNCmBgYHtyfQ0KaGVscChCb3N0b24pDQpgYGANCg0KUmVmZXJlbmNpbmcgdGhlIGZvbGxvd2luZyBkZXNjcmlwdGlvbnMgaW4gdGhlIGhlbHAgZmlsZSwgSSBzZWxlY3RlZCB0aGUgZm9sbG93aW5nIDQgdmFyaWFibGVzIHRvIGV4YW1pbmUgY29ycmVsYXRpb24sIHVzaW5nIHRoZSBtZWRpYW4gdmFsdWUgb2YgaG9tZXMgYXMgbXkgcmVzcG9uc2UgdmFyaWFibGUgYW5kIHRoZSBvdGhlciAzIGFzIG15IHByZWRpY3RvciB2YXJpYWJsZXMuDQoNCjEpCW1lZHYNCm1lZGlhbiB2YWx1ZSBvZiBvd25lci1vY2N1cGllZCBob21lcyBpbiBcJDEwMDBzLg0KMikgYWdlDQpwcm9wb3J0aW9uIG9mIG93bmVyLW9jY3VwaWVkIHVuaXRzIGJ1aWx0IHByaW9yIHRvIDE5NDAuDQozKQljcmltDQpwZXIgY2FwaXRhIGNyaW1lIHJhdGUgYnkgdG93bi4NCjQpIHJtDQphdmVyYWdlIG51bWJlciBvZiByb29tcyBwZXIgZHdlbGxpbmcuDQoNCg0KYGBge3J9DQpwYWlycyggfiBtZWR2ICsgYWdlICsgY3JpbSArIHJtLCBCb3N0b24pDQpgYGANCg0KPGgzPlNlbGVjdCAyIHZhcmlhYmxlcyBmb3Igc2ltcGxlIGxpbmVhciByZWdyZXNzaW9uPC9oMz4NCkZyb20gYSB2aXN1YWwgZXhhbWluYXRpb24sIGl0IGFwcGVhcnMgdGhhdCB0aGVyZSdzIGEgcG9zaXRpdmUgY29ycmVsYXRpb24gYmV0d2VlbiBtZWRpYW4gaG9tZSB2YWx1ZSBhbmQgYXZlcmFnZSBudW1iZXIgb2Ygcm9vbXMgcGVyIGR3ZWxsaW5nLiAgTGV0J3MgcGxvdCBqdXN0IHRoZXNlIDIgdmFyaWFibGVzIGFuZCBjYWxjdWxhdGUgdGhlIGNvcnJlbGF0aW9uIHZhbHVlOg0KDQpgYGB7cn0NCnBsb3QoQm9zdG9uJHJtLCBCb3N0b24kbWVkdiwgeGxhYj0iQXZnIE5vLiBSb29tcyBwZXIgRHdlbGxpbmciLCB5bGFiPSJNZWRpYW4gSG9tZSBWYWx1ZSBpbiAkMTAwMHMiKQ0KY29yKEJvc3RvbiRybSwgQm9zdG9uJG1lZHYpDQpgYGANCg0KDQo8aDQ+SHlwb3RoZXNpcyBUZXN0PC9oND4NClRoZSBudWxsIGh5cG90aGVzaXMgaGVyZSBpcyB0aGF0IEF2ZXJhZ2UgTnVtYmVyIG9mIFJvb21zIHBlciBEd2VsbGluZyBpcyBub3QgYSBwcmVkaWN0b3Igb2YgTWVkaWFuIEhvbWUgVmFsdWUuICBUaGUgYWx0ZXJuYXRpdmUgaHlwb3RoZXNpcyBoZXJlIGlzIHRoYXQgQXZlcmFnZSBOdW1iZXIgb2YgUm9vbXMgcGVyIER3ZWxsaW5nIGlzIGEgcmVhc29uYWJsZSBwcmVkaWN0b3Igb2YgTWVkaWFuIEhvbWUgVmFsdWUuICBVc2luZyBhIDk1JSBjb25maWRlbmNlIGludGVydmFsLCB3ZSdsbCByZWplY3QgdGhlIG51bGwgaHlwb3RoZXNpcyBpZiB0aGUgbW9kZWwncyBwLXZhbHVlIGlzIGxlc3MgdGhhbiAwLjA1LCBhbmQgYWNjZXB0IHRoZSBudWxsIGh5cG90aGVzaXMgaWYgdGhlIHAtdmFsdWUgaXMgZ3JlYXRlciB0aGFuIDAuMDUNCg0KPGg0PkNyZWF0ZSBhIGxpbmVhciByZWdyZXNzaW9uIG1vZGVsIHVzaW5nIHRoZSBsbSgpIGZ1bmN0aW9uPC9oND4NCmBgYHtyfQ0KdmFsdWUucm9vbXMubW9kZWwgPC0gbG0obWVkdiB+IHJtLCBCb3N0b24pDQp2YWx1ZS5yb29tcy5tb2RlbA0Kc3VtbWFyeSh2YWx1ZS5yb29tcy5tb2RlbCkNCmBgYA0KDQpOb3RlIHRoYXQgdGhlIHIgc3F1YXJlZCB2YWx1ZSBvZiAwLjQ4MzUgaW5kaWNhdGVzIHRoZXJlIGlzIGEgcmVsYXRpb25zaGlwIGJldHdlZW4gdGhlc2UgMiB2YXJpYWJsZXMgYmVjYXVzZSBpdCBpcyBub3QgY2xvc2UgdG8gMCwgYW5kIHRoZSBwLXZhbHVlIGJlaW5nIGxlc3MgdGhhbiAwLjA1IGluZGljYXRlcyBhIHJlbGF0aW9uc2hpcCBhdCA5NSUgY29uZmlkZW5jZSBhbmQgd2UgY2FuIHJlamVjdCB0aGUgbnVsbCBoeXBvdGhlc2lzLiAgTm93IGxldCdzIHBsb3QgdGhlIGJlc3QtZml0IGxpbmUgZm9yIG91ciBtb2RlbCBvbiB0b3Agb2YgdGhlIHNjYXR0ZXJwbG90Lg0KDQpgYGB7cn0NCnBsb3QoQm9zdG9uJHJtLCBCb3N0b24kbWVkdiwgeGxhYj0iQXZnIE5vLiBSb29tcyBwZXIgRHdlbGxpbmciLCB5bGFiPSJNZWRpYW4gSG9tZSBWYWx1ZSBpbiAkMTAwMHMiKQ0KYWJsaW5lKHZhbHVlLnJvb21zLm1vZGVsLCBjb2w9InJlZCIpDQpgYGANCg0KPGg0PkFuYWx5c2lzPC9oND4NCg0KICBXaGlsZSB0aGVyZSBkb2VzIGFwcGVhciB0byBiZSBhIHNpZ25pZmljYW50IGxpbmVhciByZWxhdGlvbnNoaXAgYmV0d2VlbiBudW1iZXIgb2Ygcm9vbXMgYW5kIGhvbWUgdmFsdWUsIHRoZXJlIGlzIGEgcmVsYXRpdmVseSBsYXJnZSByZXNpZHVhbCBzdGFuZGFyZCBlcnJvciBvZiA2LjYxNiwgbWVhbmluZyB0aGF0IHRoZXJlJ3Mgc2lnbmlmaWNhbnQgdmFyaWFuY2UgaW4gdGhlIHByZWRpY3RlZCBtZWRpYW4gdmFsdWUgb2YgaG9tZXMgaW4gdGhlIG1vZGVsLiAgSSB0aGluayB0aGlzIGlzIGEgcmVzdWx0IG9mIHRoZSBkYXRhIGZvciBib3RoIHZhcmlhYmxlcyBsYWNraW5nIG5vcm1hbGl0eSBpbiBkaXN0cmlidXRpb24sIGFzIGluZGljYXRlZCBiZWxvdyBieSB0aGUgcC12YWx1ZXMgYmVpbmcgbGVzcyB0aGFuIDAuMDUgZm9yIHRoZSBTaGFwaXJvLVdpbGsgbm9ybWFsaXR5IHRlc3QuDQoNCmBgYHtyfQ0Kc2hhcGlyby50ZXN0KEJvc3RvbiRtZWR2KQ0Kc2hhcGlyby50ZXN0KEJvc3RvbiRybSkNCmBgYA0KDQo8aDQ+Q29uY2x1c2lvbnM8L2g0Pg0KQW5vdGhlciBwcm9ibGVtIHdpdGggdGhpcyBtb2RlbCB3b3VsZCBiZSBpbiB0aGUgcHJlZGljdGlvbiBvZiBhIG1lZGlhbiBob21lIHZhbHVlIG5lYXIgJDAgb3IgbGVzcyBmb3IgYXZlcmFnZSByb29tICNzIGxlc3MgdGhhbiB+NC4yLiAgRm9yIGV4YW1wbGUsIHRoaXMgbW9kZWwgd291bGQgZmFpbCBhdCBwcmVkaWN0aW5nIGhvbWUgdmFsdWVzIGZvciAyIGFuZCAzIHJvb20gaG9tZXMuICBJbiBjb25jbHVzaW9uLCB0aGUgcmVsYXRpb25zaGlwIGJldHdlZW4gdGhlc2UgMiB2YXJpYWJsZXMgaXMgbm90IHN0cm9uZyBidXQgaXMgbm90IHdlYWsgZWl0aGVyLCBhbmQgbnVtYmVyIG9mIHJvb21zIGlzIGEgbW9kZXJhdGUgcHJlZGljdG9yIG9mIGhvbWUgdmFsdWUgc3ViamVjdCB0byBhIHJlbGF0aXZlbHkgaGlnaCBzdGFuZGFyZCBlcnJvciBpbiBib3RoIGRpcmVjdGlvbnMuDQoNCg==</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="/d2l/common/math/MathML.js?v=10.8.1.11279-197 "></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() { D2LMathML.DesktopInit('https://s.brightspace.com/lib/mathjax/2.6.1/MathJax.js?config=MML_HTMLorMML','https://s.brightspace.com/lib/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'); });</script></body></html>

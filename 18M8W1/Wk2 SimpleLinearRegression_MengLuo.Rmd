@@ -1,0 +1,109 @@
+---
+title: "Meng Luo<br>
+MSDS - 660 Statistical Methods and<br> 
+Experimental Design<br>"
+output: html_notebook
+---
+##Week 2: Simple Linear Regression - Exercise: Linear Regression Using R
+May 23rd, 2018
+```{r,echo=FALSE,results=FALSE}
+rm(list=ls()) # Removes all objects to prevent results from previous runs being carried over into new runs.
+graphics.off()  # Clears the graphic plots window
+cat("\014")     # Clears the console
+# setwd("C:/Codes/Data/MSDS660Stats/Week2")
+library(MASS)# https://cran.r-project.org/web/packages/MASS/MASS.pdf
+```
+###1. Data set description
+We will use the "Housing Values in Suburbs of Boston" data set from MASS package version 7.3-50. This data frame was collected back in 1978 and it seems pretty clean with 506 observations and 14 columns. The columns are:
+
+crim: per capita crime rate by town.<br>
+zn: proportion of residential land zoned for lots over 25,000 sq.ft.<br>
+indus:  proportion of non-retail business acres per town.<br>
+chas: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise).<br>
+nox:  nitrogen oxides concentration (parts per 10 million).<br>
+rm: average number of rooms per dwelling.<br>
+age:  proportion of owner-occupied units built prior to 1940.<br>
+dis:  weighted mean of distances to five Boston employment centres.<br>
+rad:  index of accessibility to radial highways.<br>
+tax:  full-value property-tax rate per \$10,000.<br>
+ptratio:  pupil-teacher ratio by town.<br>
+black:  sqr(1000(Bk-0.63)) where Bk is the proportion of blacks by town.<br>
+lstat:  lower status of the population (percent).<br>
+medv: median value of owner-occupied homes in \$1000s.<br>
+
+(https://cran.r-project.org/web/packages/MASS/MASS.pdf)
+
+```{r}
+head(Boston)
+tail(Boston)
+```
+###2. Exploratory data analysis
+```{r}
+Boston_4 <- subset(Boston, select = c( "rm","medv", "dis", "indus"))
+plot(Boston_4)
+```
+We can find the data pairs of (indus,dis) and (rm, medv) showing certain patterns. However, before we go further into calculation, there are some out-lined records with rm values of 50. Let's create a data subset 'BostonX' without them and see how it will affect our results. 
+```{r}
+Boston[order(Boston$medv,decreasing=T)[1:20],]
+summary(Boston$medv)
+BostonX <- subset(Boston, medv<50)
+summary(BostonX$medv)
+plot(density(Boston$medv))
+plot(density(BostonX$medv))
+```
+
+I am not sure whether these points with medv= 50 are outliners: they may be placeholders for missing data or legit data simply because there were many properties prized at $50,000 back then in Boston. We will calculate without outliners first and the other scenario later to see what difference it makes.
+
+###3. Data pairs correlation
+According to the scatterplots we draw in the last section for the data subset with 4 columns of rm, medv, dis, and indus, the pair (rm, medv) shows a positive correlation while (dis, indus) shows a negative one. And (rm, indus) has no correlation.
+
+```{r}
+BostonX_2a <- subset(BostonX, select = c( "rm", "medv"))
+plot(BostonX_2a)
+BostonX_2b <- subset(BostonX, select = c( "indus", "dis"))
+plot(BostonX_2b)
+BostonX_2c <- subset(BostonX, select = c( "rm", "indus"))
+plot(BostonX_2c)
+```
+
+###4,5,6. Linear regression on data pair (rm, medv)
+By choosing the variables pairs of average room number(rm) and median value of homes (medv), we try to decide whether they have correlation.<br>
+The null hypotheis H0="rm and medv have no correlation".(beta = 0)
+ <br>
+The alternative hypotheis H1="rm and medv have  correlation".(beta <> 0) <br>
+```{r}
+plot(BostonX_2a, sub="without outliners")
+BostonX.lm <- lm(rm ~ medv, BostonX_2a)
+summary(BostonX.lm)
+```
+###7,8. Result discussion
+The result shows rm and medv have a p-value lower than 5% significance level for the null hypotheis. Therefore there is evidence of a significant relationship and our H0 is rejected. It proves that rm and medv have correlation with linear relationship. <br>
+
+###9. Model assumption verification
+Linearity: we can verify it by observing the rm vs medv plot. The low p-value also shows evidence in our linear model. <br>
+Normality: The residuals have normal distribution around zero and the mean of residuals is almost zero. Therefore the assumption holds true.
+
+```{r}
+plot(density(BostonX.lm$residuals))
+mean(BostonX.lm$residuals)
+```
+
+Constant variance of residuals: We can confirm it by plotting the residuals, which is randomly distributed around zero.
+```{r}
+plot(BostonX.lm$residuals)
+```
+
+In addition, by running a command for correlation coefficient, we can confirm that the model is a good fit.
+
+```{r}
+ cor(BostonX_2a,use = "all.obs",method = "pearson") 
+```
+### 10 Conclusion: Findings and concerns
+The calulation shows that values of rm and medv have a position correlation. If we investigate further, the existance of outliners in the original dataset will not hurt our model and assuptions.
+```{r}
+Boston_2a <- subset(Boston, select = c( "rm", "medv"))
+plot(Boston_2a, sub="with outliners")
+Boston.lm <- lm(rm ~ medv, Boston_2a)
+summary(Boston.lm)
+cor(Boston_2a,use = "all.obs",method = "pearson") 
+```

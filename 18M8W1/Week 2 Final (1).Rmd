@@ -1,0 +1,142 @@
+---
+title: "Week 2 Assignment"
+author: "Ayodele Odubela"
+date: "5/26/2018"
+output: pdf_document
+---
+
+Importing Required Libraries
+```{r}
+library(MASS)
+library(PerformanceAnalytics)
+```
+
+1) By looking at this dataset, it's describes the characteristics of 506 Boston area homes with 14 variables.
+```{r}
+plot(Boston)
+```
+
+The features include the crime per capita, propotion of residential zoned lots > 25,000 sqft, non-retail business acres, distance to Charles River, nitric oxides concentration in parts per 10 million, average rooms per home, proportion of owner occupeied units < 1940, weighted distances to maor Boston employers, accesibility to highways, property tax, pupil-teacher ratio, proportion of Black people by town, % lower status of the population, and median value of owner occupied homes in $1000s.
+
+```{r}
+Boston1 <- Boston
+print(Boston1)
+```
+
+2) Here we can see that most homes are between 20-25k. While it's not a perfectly normal distribution with a longer right tail, it's understandable why there aren't more homes above 40k. 
+```{r}
+hist(Boston1$medv)
+```
+
+Something interesting I found here was that the average of rooms per dwelling is 6. This seems high to me, but considering many homes built in the 70s in the NE were made to have many children and sometimes many families, it makes sense that as home prices rise, the average number of rooms also increases.
+```{r}
+plot(Boston1$rm,
+     Boston1$medv)
+
+summary(Boston1)
+str(Boston1)
+```
+
+3) Here I create 3 pairwise charts of 4 attributes to look for linear relationsips
+```{r}
+Boston_1 <- subset(Boston1, select = c("nox", "rad", "dis", "crim"))
+plot(Boston_1)
+```
+
+```{r}
+Boston_2 <- subset(Boston1, select = c("rm", "tax", "black", "medv"))
+plot(Boston_2)
+                   
+```
+
+```{r}
+Boston_3 <- subset(Boston1, select = c("ptratio", "indus", "zn", "lstat"))
+plot(Boston_3)
+```
+
+When plotting the percentage of black people in a town to the median home value, it appears the larger the percentage of black people, the higher the variance in home prices. Most are clustered arougn 15-40k, but all homes above $40k have a higher black population. 
+```{r}
+plot(Boston1$black,
+     Boston1$medv,
+     main = "% Black vs Median Home Value",
+     xlab = "black",
+     ylab = "home value")
+```
+
+4) Below is a scatterplot that shows the relationship between median home value and the number of rooms in the home. This looks like it has the most linear appearance so I will use these features for my regression model. The objective here is to find out if number of rooms has a positive correlation with median home value. 
+```{r}
+plot(Boston1$medv, Boston1$rm)
+#correlation <- cor(Boston1$medv,Boston1$rm)
+#print(correlation)
+```
+
+I noticed there's a vertical line of points along the y axis at 50k, most likely representing homes over 50k. 
+```{r}
+summary(Boston1$medv)
+```
+
+Removing values at 50k in my subset for modelling
+```{r}
+Boston2 <- subset(Boston1, select = c(rm, medv))
+Boston2 <- Boston2[Boston2$medv != 50,]
+```
+
+```{r}
+plot(Boston2)
+```
+
+
+With a correlation of .68, there is a moderately strong linear relationship
+
+```{r}
+correlation <- cor(Boston2$medv,Boston2$rm)
+print(correlation)
+```
+
+
+5) 
+Null Hypothesis (H0): There is no correlation between number of rooms and median value.
+
+Alternative Hypothesis (H1): There is a positive correlation between number of rooms and median value.
+
+6)
+Here I perform linear regression on the Boston2 subset
+```{r}
+Boston2.lm <- lm(medv~ rm, Boston2)
+```
+
+
+Displaying the results of the linear regression
+```{r}
+Boston2.lm
+```
+
+Here I'm able to see the coefficient of determination, the r squared value.
+```{r}
+summary(Boston2.lm)$r.squared
+```
+
+7) There is a postive correlation between room size and the median value, however it is not extremely high. While room size is involved in calculating housing prices, I would say it is not the most determing factor. 
+
+```{r}
+plot(Boston2.lm)
+```
+
+
+8) Yes, there is evidence of a linear (positive) relationship between the number of rooms and median value. Here I make the decision to rejct the Null hypothesis (that there is no correlation between the two variables). I accept the alternative hypothesis.
+```{r}
+cor(Boston2, 
+    use = "all.obs", # Specifies the handling of missing data. Options are all.obs (assumes no missing data - missing data will produce an error), complete.obs (listwise deletion), and pairwise.complete.obs (pairwise deletion)
+    method = "pearson" # Specifies the type of correlation. Options are pearson, spearman or kendall.
+      )
+```
+
+9) Model Assumptions
+When looking at the plot of median home value and number of rooms, we confirm the assumption that there is a somewhat linear realationship between points. We assume each variable is independent, but this is a question about how the data are collected. Desipte not having data about all homes at this time, I looked at 100% of the available population for the inference prediction.
+```{r}
+plot(Boston2)
+abline(lm(Boston2$medv~Boston2$rm), col="red")
+```
+
+
+10) I have not worked with implementing linear regression before so this was an interesting task in investigating linearity. I was not surprised by what I found, that the room size played a positive part in determining the median house value. It appears that this variable will be important in looking at multiple linear regression variables for the same response variable. 

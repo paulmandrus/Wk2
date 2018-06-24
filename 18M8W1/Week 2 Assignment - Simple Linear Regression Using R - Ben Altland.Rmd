@@ -1,0 +1,88 @@
+---
+title: "Week 2 Lab: Linear Regression using R"
+output: html_notebook
+---
+<h3>Ben Altland<br>
+MSDS - 660 Statistical Methods and Experimental Design<br> 
+23 May 2018</h3>
+
+<h4>In this exercise, I'll perform simple linear regression using the Boston data set from the MASS package.</h4>
+
+```{r}
+rm(list = ls()) # Removes all objects to prevent results from previous runs being carried over into new runs.
+graphics.off()  # Clears the graphic plots window
+cat("\014")     # Clears the console
+setwd("C:/users/ben/Desktop/MSDS/660 - Statistical Methods and Experimental Design/Assignments/Week 2")
+```
+
+<h3>Describe and explore the Boston data set:</h3>
+
+First, I'll call the MASS library, load the Boston data set, and examine the structure
+```{r}
+install.packages("MASS")
+library(MASS)
+data(Boston)
+str(Boston)
+head(Boston)
+```
+
+Using the str() command, we can see that this data set contains 506 observations of 14 different variables.  The abbreviations for these variable column names don't explicitly indicate what they're measuring, so I examined the help file for this data set.  From this, I see the full title of the data set "Housing Values in the Suburbs of Boston" and it appears as though the variables measure different factors for each suburban area that may or may not have a correlation with housing values as indicated in the title of the data set.
+
+```{r}
+help(Boston)
+```
+
+Referencing the following descriptions in the help file, I selected the following 4 variables to examine correlation, using the median value of homes as my response variable and the other 3 as my predictor variables.
+
+1)	medv
+median value of owner-occupied homes in \$1000s.
+2) age
+proportion of owner-occupied units built prior to 1940.
+3)	crim
+per capita crime rate by town.
+4) rm
+average number of rooms per dwelling.
+
+
+```{r}
+pairs( ~ medv + age + crim + rm, Boston)
+```
+
+<h3>Select 2 variables for simple linear regression</h3>
+From a visual examination, it appears that there's a positive correlation between median home value and average number of rooms per dwelling.  Let's plot just these 2 variables and calculate the correlation value:
+
+```{r}
+plot(Boston$rm, Boston$medv, xlab="Avg No. Rooms per Dwelling", ylab="Median Home Value in $1000s")
+cor(Boston$rm, Boston$medv)
+```
+
+
+<h4>Hypothesis Test</h4>
+The null hypothesis here is that Average Number of Rooms per Dwelling is not a predictor of Median Home Value.  The alternative hypothesis here is that Average Number of Rooms per Dwelling is a reasonable predictor of Median Home Value.  Using a 95% confidence interval, we'll reject the null hypothesis if the model's p-value is less than 0.05, and accept the null hypothesis if the p-value is greater than 0.05
+
+<h4>Create a linear regression model using the lm() function</h4>
+```{r}
+value.rooms.model <- lm(medv ~ rm, Boston)
+value.rooms.model
+summary(value.rooms.model)
+```
+
+Note that the r squared value of 0.4835 indicates there is a relationship between these 2 variables because it is not close to 0, and the p-value being less than 0.05 indicates a relationship at 95% confidence and we can reject the null hypothesis.  Now let's plot the best-fit line for our model on top of the scatterplot.
+
+```{r}
+plot(Boston$rm, Boston$medv, xlab="Avg No. Rooms per Dwelling", ylab="Median Home Value in $1000s")
+abline(value.rooms.model, col="red")
+```
+
+<h4>Analysis</h4>
+
+  While there does appear to be a significant linear relationship between number of rooms and home value, there is a relatively large residual standard error of 6.616, meaning that there's significant variance in the predicted median value of homes in the model.  I think this is a result of the data for both variables lacking normality in distribution, as indicated below by the p-values being less than 0.05 for the Shapiro-Wilk normality test.
+
+```{r}
+shapiro.test(Boston$medv)
+shapiro.test(Boston$rm)
+```
+
+<h4>Conclusions</h4>
+Another problem with this model would be in the prediction of a median home value near $0 or less for average room #s less than ~4.2.  For example, this model would fail at predicting home values for 2 and 3 room homes.  In conclusion, the relationship between these 2 variables is not strong but is not weak either, and number of rooms is a moderate predictor of home value subject to a relatively high standard error in both directions.
+

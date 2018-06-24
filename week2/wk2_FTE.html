@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>From the Expert: What is Data Science?</title>
+<link href="https://rhchp.regis.edu/css/course_css/stylesheets/ccis/ccis-css.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="../css/local.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML-full"></script>
+</head>
+
+<body>
+<div class="cps_ribbon"><img src="http://cpsdl2.regis.edu/!Templates/ccis/images/core/header_ribbon.png" width="339" height="96" /></div>
+<h1>Week 2: Simple  Linear Regression</h1>
+<p>Regression  was originally developed in 18th century to solve astronomy  problems. Adrien-Marie Legendre; a French mathematician, formulated the least  squares method in 1805.  Later, in 1875,  Francis Galton coined the term regression to explain the situation where the  heights of descendants of tall ancestors tend to regress towards a normal  average. For example, sons of tall fathers tend for their heights to be closer  to the average (shorter) while sons of short fathers tend to also have their  heights be closer to average (taller). This effect is referred as &ldquo;regression  to mediocrity&rdquo;.  This is an originating  of the term &ldquo;regression analysis&rdquo;. </p>
+<p>Regression  analysis is a statistical process for estimating linear dependence  relationships among variables. The main goal is to predict the response from  one or more variables. Regression analysis can be used in prediction and  forecasting. These usages, however, are overlap with the field of machine  learning. Regression analysis can be used to answer the following questions:</p>
+<ul>
+  <li>(<strong>Descriptive</strong>) What is the relationship between  the dependent and independent variables?</li>
+  <li>(<strong>Inferences</strong>) Which independent variables are the  most important?</li>
+  <li>(<strong>Prediction</strong>)   What is the value of the response variable given one or more observation  values?</li>
+</ul>
+<p>In  general, regression analysis is used when both independent and dependent  variables are continuous. Nevertheless, regression can also apply to  categorical independent variables and dichotomous dependent variables with some  modifications. </p>
+<p>The  dependent variable is also referred to as the response variable or outcome  variable, whereas, independent variable is also known as predictor variable.</p>
+<p>Examples  of regression analysis applied in business applications are:</p>
+<ul>
+  <li>The effect/relationship of interest rates and  stock prices</li>
+  <li>The wage and retention rate of the  employees  </li>
+  <li>The advertisement budget and corporate sales</li>
+  <li>The subscription rate and the membership cost</li>
+  <li>Which promotions generate the most sales?</li>
+</ul>
+<p>Regression  analysis consists of:</p>
+<ul>
+  <li>A single response variable <em>Y </em>(must be continuous variable)</li>
+  <li>One or more predictor variables: <img width="86" height="19" src="../images/week2/wk2_FTE_clip_image002.png" /> <br />
+    Where <em>n</em>=1 is simple  regression<br />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>n</em> <img width="12" height="19" src="../images/week2/wk2_FTE_clip_image004.png" />2 is multiple regression (or  multivariate in public health)</li>
+</ul>
+<ul>
+  <li>The unknown parameters β<strong> </strong>(scalar or vector)</li>
+</ul>
+<h3>1. Simple  Linear Regression </h3>
+<p>Simple  linear regression is used for examining the relationship between two  quantitative variables by linear equations that best summarize the relation,  for instance, advertisement budget and the revenue. Typically, the dependent  variable or response variable (<em>y</em>)  measures an outcome of a study, whereas, the independent variable or  explanatory variable (<em>x</em>) cause the  change in the response variable. Simple linear regression involves only a <strong><em>single</em></strong> quantitative <strong><em>explanatory variable</em></strong>.</p>
+<p>Can  you specify the possible explanatory variable and response variable in  following problems?</p>
+<ul>
+  <li>The  number of clicks and the amount of revenue</li>
+  <li>The  membership fees and number of subscriptions</li>
+  <li>The  yield of produce and inches of rain</li>
+</ul>
+<p>The  (population) relationship between <em>y</em> and <em>x</em> can be formulated as:</p>
+<blockquote>
+  <p><img width="249" height="19" src="../images/week2/wk2_FTE_clip_image006.png" /></p>
+</blockquote>
+<p>Where <img width="85" height="19" src="../images/week2/wk2_FTE_clip_image008.png" />, independeent<br />
+  The  unknown parameters include:<br />
+  <img width="18" height="19" src="../images/week2/wk2_FTE_clip_image010.png" />  (Intercept) is the point where the line  intercept <em>y</em>-axis<br />
+  <img width="21" height="19" src="../images/week2/wk2_FTE_clip_image012.png" /> (Slope) is the slope of the line or the  increase in <em>y</em> per unit change in <em>x</em>.   Note that, <img width="21" height="19" src="../images/week2/wk2_FTE_clip_image012_0000.png" />is positive when <em>y</em> (linearly) increases as <em>x</em> increases. <img width="21" height="19" src="../images/week2/wk2_FTE_clip_image012_0001.png" />is negative when <em>y</em> (linearly) decreases as <em>x</em> increases. This straight line often  used to describe the trend of the data set.</p>
+<p><img width="389" height="226" src="../images/week2/wk2_FTE_clip_image014.png" align="left" hspace="12" /></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Linear  Regression (population)<br />
+</p>
+<p>Source: <a href="http://www.personal.kent.edu/~mshanker/personal/Classes/f06/ch13_F06.pdf">http://www.personal.kent.edu/~mshanker/personal/Classes/f06/ch13_F06.pdf</a></p>
+<table>
+  <tr>
+    <td width="91" valign="top"><p>Line    Type</p></td>
+    <td width="348" valign="top"><p>Regression    Equation</p></td>
+    <td width="71" valign="top"><p>Intercept</p></td>
+    <td width="80" valign="top"><p>Slope</p></td>
+  </tr>
+  <tr>
+    <td width="91" valign="top"><p>Population</p></td>
+    <td width="348" valign="top"><p><img width="26" height="19" src="../images/week2/wk2_FTE_clip_image016.png" /> <img width="101" height="19" src="../images/week2/wk2_FTE_clip_image018.png" /></p></td>
+    <td width="71" valign="top"><p><img width="18" height="19" src="../images/week2/wk2_FTE_clip_image010_0000.png" /></p></td>
+    <td width="80" valign="top"><p><img width="21" height="19" src="../images/week2/wk2_FTE_clip_image012_0002.png" /></p></td>
+  </tr>
+  <tr>
+    <td width="91" valign="top"><p>Sample</p></td>
+    <td width="348" valign="top"><p><img width="9" height="19" src="../images/week2/wk2_FTE_clip_image020.png" /> = <img width="58" height="19" src="../images/week2/wk2_FTE_clip_image022.png" /></p></td>
+    <td width="71" valign="top"><p><img width="15" height="19" src="../images/week2/wk2_FTE_clip_image024.png" /></p></td>
+    <td width="80" valign="top"><p><img width="15" height="19" src="../images/week2/wk2_FTE_clip_image026.png" /></p></td>
+  </tr>
+</table>
+<p>In  most settings, we cannot determine the population parameters directly. Thus,  the values are estimated from a sample. The sample regression line is an  estimation of the population regression. The goal is to find the equation of  line that fits the data the best. In other words, we need to find <img width="15" height="19" src="../images/week2/wk2_FTE_clip_image024_0000.png" /> and <img width="15" height="19" src="../images/week2/wk2_FTE_clip_image026_0000.png" /> such that the observed value (<img width="13" height="19" src="../images/week2/wk2_FTE_clip_image028.png" />) and the fitted value or  predicted value (<img width="9" height="19" src="../images/week2/wk2_FTE_clip_image020_0000.png" />) is minimized. The fitted  value <img width="9" height="19" src="../images/week2/wk2_FTE_clip_image020_0001.png" /> is given by</p>
+<p align="center"><img width="13" height="19" src="../images/week2/wk2_FTE_clip_image030.png" />= <img width="58" height="19" src="../images/week2/wk2_FTE_clip_image022_0000.png" /></p>
+<p>The  difference between the observed value (<img width="13" height="19" src="../images/week2/wk2_FTE_clip_image028_0000.png" />) and the fitted value is  known as residual. Therefore, the residual is <img width="79" height="19" src="../images/week2/wk2_FTE_clip_image032.png" />.  If most of the residuals are small, it  usually indicates that the model is good at explaining the response variable or  the model has a good fit.   </p>
+<h3>2. Fitting  Regression Lines: (Ordinary) Least Squares   or OLS</h3>
+<p>There  are many methods for fitting a line such as minimize sum of prediction errors (<img width="85" height="19" src="../images/week2/wk2_FTE_clip_image034.png" /> Unfortunately, there are many lines that  satisfy this equation criterion. Thus, a better method is needed. The OLS is the  most common method for estimating unknown parameters in linear regression models  by minimizing the sum of squared residuals (SSE) or residual sum squares (RSS),  which are the sum squared deviations (vertical distance) between each data  point and the regression line. Subject to constraint that total error is 0.</p>
+ <p align="center"> <img width="92" height="33" src="../images/week2/wk2_FTE_clip_image036.png" /></p>
+<p align="center">=<img width="77" height="19" src="../images/week2/wk2_FTE_clip_image038.png" /></p>
+<p align="center">=<img width="131" height="19" src="../images/week2/wk2_FTE_clip_image040.png" /></p>
+<p>The  relationship between 2 variables can be simply explored using scatter plots and  the correlation coefficient. For regression analysis, however, there is  additional step that is a straight line is superimposed (overlaid) on a scatter  plot to clarify the relationship.</p>
+<p>Without  going into calculation details, the coefficients <img width="15" height="19" src="../images/week2/wk2_FTE_clip_image026_0001.png" /> and <img width="15" height="19" src="../images/week2/wk2_FTE_clip_image024_0001.png" /> from least squares equation can be formulated  as: </p>
+<p align="center"><img width="238" height="47" src="../images/week2/wk2_FTE_clip_image042.png" /></p>
+<p align="center"><img width="99" height="19" src="../images/week2/wk2_FTE_clip_image044.png" /></p>
+<ul>
+  <li>Intercept (<img width="15" height="19" src="../images/week2/wk2_FTE_clip_image024_0002.png" />) is the value of the  (predicted) response value where the value of explanatory variable is equal to  zero.</li>
+  <li>Slope (<img width="15" height="19" src="../images/week2/wk2_FTE_clip_image026_0002.png" />) is the amount of change in  the predicted response variable where the explanatory variable is changed by  one unit.</li>
+  <li>The regression line can be used to predict the  value of the response variable <img width="9" height="19" src="../images/week2/wk2_FTE_clip_image046.png" /> for a given value of explanatory variable <img width="9" height="19" src="../images/week2/wk2_FTE_clip_image048.png" />. Interpolation is the  prediction <strong><em>in the range</em></strong> of the observed value <img width="9" height="19" src="../images/week2/wk2_FTE_clip_image048_0000.png" />. While, extrapolation is  the prediction <strong><em>outside</em></strong> the range of the observed value. Pay attention in  prediction for any <img width="9" height="19" src="../images/week2/wk2_FTE_clip_image046_0000.png" /> values when &#119909; is further away from the  observed range since the linear relationship between <img width="9" height="19" src="../images/week2/wk2_FTE_clip_image046_0001.png" /> and <img width="9" height="19" src="../images/week2/wk2_FTE_clip_image048_0001.png" /> may not valid outside this range. </li>
+</ul>
+<p>&nbsp;</p>
+<p>These  are many statistical packages such as R, SPSS, SAS, and Excel that can be used  to compute these coefficients and other regression measures as part of  regression analysis. <br />
+  Least  squares regression consists of these properties:</p>
+<ul>
+  <li>The sum of the residuals of the least squares  regression line is equal to zero<br />
+  <img width="101" height="33" src="../images/week2/wk2_FTE_clip_image050.png" /></li>
+</ul>
+<ul>
+  <li>The sum of squared residuals is minimized, that  is <br />
+  <img width="73" height="19" src="../images/week2/wk2_FTE_clip_image052.png" />= 0</li>
+</ul>
+<ul>
+  <li>The simple regression line always pass through <img width="19" height="19" src="../images/week2/wk2_FTE_clip_image054.png" /> <img width="13" height="19" src="../images/week2/wk2_FTE_clip_image056.png" />)</li>
+  <li>The least square coefficients <img width="65" height="19" src="../images/week2/wk2_FTE_clip_image058.png" /> are unbiased estimations of <img width="18" height="19" src="../images/week2/wk2_FTE_clip_image010_0001.png" />and <img width="21" height="19" src="../images/week2/wk2_FTE_clip_image012_0003.png" /></li>
+</ul>
+<h3>3. Inference  for Regression Parameters </h3>
+<p>Since  there is only one predictor variable in simple linear regression, therefore,  the main focus in on the slope <img width="16" height="19" src="../images/week2/wk2_FTE_clip_image060.png" />. The slope indicates a  change in the response <em>y</em> for a unit  change of <em>x</em>. </p>
+<p>T-test  is used for testing the slope of the population to see whether there is any  linear relationship between 2 variables. </p>
+<h4>3.1  Hypothesis for slope testing:</h4>
+<p><img width="71" height="19" src="../images/week2/wk2_FTE_clip_image062.png" />    (there is no linear relationship between  tested variables)<br />
+<img width="71" height="19" src="../images/week2/wk2_FTE_clip_image064.png" />    (there is a linear relationship)</p>
+<p>Note  that, we can also use one tail for the alternative hypothesis.</p>
+<p>Test  statistic:  <img width="120" height="21" src="../images/week2/wk2_FTE_clip_image066.png" /> with  DF  (degree of freedom) = n-2<br />
+  <img width="15" height="19" src="../images/week2/wk2_FTE_clip_image026_0003.png" /> is the slope coefficient of sample regression<br />
+  <img width="16" height="19" src="../images/week2/wk2_FTE_clip_image060_0000.png" /> is the hypothesized slope<br />
+  <img width="21" height="21" src="../images/week2/wk2_FTE_clip_image068.png" />is the standard error  estimator of the slope</p>
+<p><img width="18" height="19" src="../images/week2/wk2_FTE_clip_image070.png" /> will be rejected if Test statistic t fall in  the critical region. <br />
+  In  this case, <img width="130" height="21" src="../images/week2/wk2_FTE_clip_image072.png" /> or <img width="114" height="21" src="../images/week2/wk2_FTE_clip_image074.png" /> , when <img width="10" height="19" src="../images/week2/wk2_FTE_clip_image076.png" /> is the level of confidence.</p>
+<h4>3.2  Confidence Intervals for Regression Coefficients</h4>
+<p>Estimation  of confidence interval for <img width="15" height="19" src="../images/week2/wk2_FTE_clip_image026_0004.png" />:  <img width="153" height="21" src="../images/week2/wk2_FTE_clip_image078.png" />   <br />
+  Estimation  of confidence interval for <img width="15" height="19" src="../images/week2/wk2_FTE_clip_image024_0003.png" />:  <img width="153" height="21" src="../images/week2/wk2_FTE_clip_image080.png" /></p>
+<p><img width="185" height="33" src="../images/week2/wk2_FTE_clip_image082.png" /></p>
+<p><img width="139" height="25" src="../images/week2/wk2_FTE_clip_image084.png" /></p>
+<p><img width="232" height="39" src="../images/week2/wk2_FTE_clip_image086.png" /></p>
+<h3>4. Underlying  Assumptions for linear regression include:</h3>
+<ul>
+  <li>The sample is representative of the population  for the inference prediction.  </li>
+  <li>Independence: the value of each outcome variable  is independent from each other (need to know how data were collected)</li>
+</ul>
+<ul>
+  <li>Linearity: the relationship between predictor  and outcome variable is a reasonably straight line. This can be detected by  plotting the data between observed values and predicted values. The points  should be distributed along a diagonal line. </li>
+</ul>
+<p><img border="0" width="468" height="289" src="../images/week2/wk2_FTE_clip_image088.png" /></p>
+<p>Scatter plot to test linear relationship</p>
+<p>Source: <a href="http://www.cs.rice.edu/~johnmc/comp528/lecture-notes/Lecture9.pdf">http://www.cs.rice.edu/~johnmc/comp528/lecture-notes/Lecture9.pdf</a></p>
+<ul>
+  <li>Normality: for a fixed value of <em>x</em>,the response <em>y </em>varies according  to a normal distribution. Non-normally distributed (e.g. highly skewed,  kurtosis) can distort relationship. This can be examined by a histogram, which  should be close to normal distribution. The Kolmogorov-Smirnov,  Anderson-Darling, and Shapiro-Wilk test provides inference statistics test on  normality.</li>
+</ul>
+<p>Data transformation such as inverse, square root or log can  improve normality. Note, that transformation can be used for correcting model  assumption violations and improving the fit. However, the interpretation could  be complicated.</p>
+<ul>
+  <li>Homoscedasticity: the prediction error should be  spread with the same degree (or constant) for the entire data range. In other  words, probability distribution of the errors has constant variance. Violation  of homoscedasticity is known as Heteroscedasticity, where error spread with  different degree and with many shapes such as fan or bow-tie. This assumption  can be verified by plotting the residual against the predicted values, the  residuals should randomly scattered around the horizontal line and distribute  relatively consistent. </li>
+</ul>
+<p><img border="0" width="503" height="145" src="../images/week2/wk2_FTE_clip_image090.png" /><br />
+  Homoscedasticity  (left) and Heteroscedasticity (right) Examples</p>
+<p>Source:   <a href="http://www.cs.rice.edu/~johnmc/comp528/lecture-notes/Lecture9.pdf">http://www.cs.rice.edu/~johnmc/comp528/lecture-notes/Lecture9.pdf</a></p>
+<ul>
+  <li>Independence and normality of error: the  prediction error should be independent from each other error and should be  normally distributed. Independence can be detected by plotting residuals <img width="25" height="19" src="../images/week2/wk2_FTE_clip_image092.png" />against the predicted value  (<img width="9" height="19" src="../images/week2/wk2_FTE_clip_image020_0002.png" />). The error distributed  normality can be checked by normal quantile plot of residuals (theoretical  standardized error and actual standardized error). The points should line close  to the diagonal reference line. </li>
+</ul>
+<p>&nbsp;</p>
+<p><img border="0" width="179" height="129" src="../images/week2/wk2_FTE_clip_image094.png" /><img border="0" width="204" height="141" src="../images/week2/wk2_FTE_clip_image096.png" /><br />
+  Errors  are independent                  Errors are normally distributed</p>
+<p>Source: <a href="http://www.cs.rice.edu/~johnmc/comp528/lecture-notes/Lecture9.pdf">http://www.cs.rice.edu/~johnmc/comp528/lecture-notes/Lecture9.pdf</a></p>
+<p>Note  that it is important to check the validity of the assumptions before continuing  with the inference or prediction.  The first two assumptions are fulfilled for the proper  design study. The last 4 assumptions should not be violated otherwise the  results may not be reliable. The violation consequences include Type I or Type  II error, over or under-estimation of significance and/or effect sizes.</p>
+<p>With  the plot between <em>y</em> and <em>x</em>, we can investigate the followings:<br />
+  <img border="0" width="428" height="316" src="../images/week2/wk2_FTE_clip_image098.png" /><br />
+  Source: <a href="http://www-hsc.usc.edu/~eckel/biostat2/notes/notes10.pdf">http://www-hsc.usc.edu/~eckel/biostat2/notes/notes10.pdf</a></p>
+<p>Residual  Analysis is a diagnostic method based mainly on the residuals. The model requires  that <img width="85" height="19" src="../images/week2/wk2_FTE_clip_image008_0000.png" />. Thus, the standardized  residuals <img width="25" height="28" src="../images/week2/wk2_FTE_clip_image100.png" /> should follow a standard normal distribution.  Residual analysis is often done graphically using</p>
+<ul>
+  <li>Quantile plots – to examine normality</li>
+  <li>Scatter plots – to assess model assumptions such  as linearity, constant variance and potential outliers</li>
+  <li>Histograms, stem, boxplot, and leaf diagram</li>
+</ul>
+<p><img border="0" width="364" height="248" src="../images/week2/wk2_FTE_clip_image102.png" /><br />
+  Source: <a href="http://courses.washington.edu/b515/l7.pdf">http://courses.washington.edu/b515/l7.pdf</a></p>
+<p><img border="0" width="255" height="179" src="../images/week2/wk2_FTE_clip_image104.png" /><img border="0" width="260" height="180" src="../images/week2/wk2_FTE_clip_image106.png" /></p>
+<p>Source: <a href="http://www.personal.kent.edu/~mshanker/personal/Classes/f06/ch13_F06.pdf">http://www.personal.kent.edu/~mshanker/personal/Classes/f06/ch13_F06.pdf</a></p>
+<h3>5. Outliers:</h3>
+<ul>
+  <li>Outliers are not typical observations. They  usually appear outside the pattern of other observations.</li>
+  <li>To identify outliers, do the scatter plot. </li>
+  <li>Problems of outliers</li>
+  <li>Including outliers in analysis may result in  changing the conclusions.</li>
+  <li>Excluding outliers that influence (correct  operation of) the system can mislead the conclusion.</li>
+  <li>Values that are different from others should be  examined for experimental error. After eliminating experimental error, one can  decide whether to use or not use these values.</li>
+</ul>
+<h3>6. Regression  Analysis general procedure:</h3>
+<ul>
+  <li>Define  research questions, questions of interest (including theory and hypothesis to  be tested)</li>
+  <li>Review  the study design (including data availability, error corrections, and  assumptions)</li>
+  <li>Explore  the data and check the assumptions such as</li>
+  <li>linearity assumption can check by scatter plot.  Transformation may be needed if not linear trend</li>
+  <li>normality can be checked by histogram and statistical  tests</li>
+  <li>Perform  regression analysis</li>
+  <li>Evaluate the model, check the fit of the model </li>
+  <li>Examine <img width="18" height="19" src="../images/week2/wk2_FTE_clip_image108.png" /> to see how much variance in the response is explained  by the model</li>
+  <li>To  make sure that the results are valid, we need to perform residual analysis such  as</li>
+  <li>check homoscedasticity assumption </li>
+  <li>check error normality assumption and error  independency</li>
+  <li>Interpret  results (e.g. test statistics, confidence interval, prediction values)</li>
+  <li>Presentation  of results </li>
+</ul>
+<h3>7. Correlation  coefficient (r) and coefficient of determination (<img width="19" height="19" src="../images/week2/wk2_FTE_clip_image110.png" />)</h3>
+<p>Correlation  coefficient is a standard measurement of association or relationship between 2  variables. Typically, the symbol <em>ρ</em><strong> </strong>denotes the  population correlation (from the population data) and <em>r</em> is the sample correlation. Please keep in mind that correlation  or association is not causation. As a reminder, regression is used to predict Y  from X using a linear rule. Correlation describes how good the relationship is.
+</p>
+<p>The  Pearson (product-moment) correlation or simply called correlation coefficient (<em>r</em>) is a typical numerical measure of the  strength and direction between two variables relationship. It can be calculated  using the following formula: </p>
+<p align="center"><img width="258" height="61" src="../images/week2/wk2_FTE_clip_image112.png" /></p>
+<p>Here  are important properties of <em>r</em>: </p>
+<ul>
+  <li>The  value is between [-1,1]</li>
+  <li><em>r</em> = +1 when there is a prefect linear  relationship between Y and X (with positive slope)</li>
+  <li><em>r </em>= -1 when there is a prefect linear  relationship between Y and X (with negative slope)</li>
+  <li>For  positive correlation (<em>r</em> &gt; 0), Y  tends to increase linearly with X</li>
+  <li>For  negative correlation (<em>r</em> &lt; 0), Y  tends to decrease linearly with X</li>
+  <li>Size  of  <em>r</em>  suggests strength of the linear relationship </li>
+</ul>
+<p>When  there is a strong linear relationship (<em>r</em> is close to +1 or -1), this suggests that Y can be accurately predicted. A  value of <em>r</em> that is close to 0  indicates A weak correlation or the linear equation is not so helpful in Y  prediction. </p>
+<p><img border="0" width="493" height="285" src="../images/week2/wk2_FTE_clip_image114.png" /><br />
+  Different <strong>linear</strong> correlation coefficient values<br />
+  Source: <a href="http://2012books.lardbucket.org/books/beginning-statistics/s14-02-the-linear-correlation-coeffic.html">http://2012books.lardbucket.org/books/beginning-statistics/s14-02-the-linear-correlation-coeffic.html</a></p>
+<p>The  coefficient of determination <img width="21" height="19" src="../images/week2/wk2_FTE_clip_image116.png" />indicates how much of the  variation in one variable can be accounted for by the other variable or total  variation in the dependent variable this is explained by variation in the  independent variable. In general, the higher the <img width="18" height="19" src="../images/week2/wk2_FTE_clip_image108_0000.png" />, the better the model fits  the data. The value of <img width="18" height="19" src="../images/week2/wk2_FTE_clip_image108_0001.png" /> is between 0 and 1 (no negative value). If  there is no linear relationship between outcome and response variables, <img width="18" height="19" src="../images/week2/wk2_FTE_clip_image108_0002.png" /> is 0. If there is a perfect linear  relationship between outcome and response variables, <img width="18" height="19" src="../images/week2/wk2_FTE_clip_image108_0003.png" /> is 1.<br />
+  Regression  is used to predict <em>y</em> from <em>x</em> using a linear rule. Correlation  describes how good the relationship is.    </p>
+<h3>8.  Measuring Goodness of Fit</h3>
+<p>Coefficient  of determination <img width="18" height="19" src="../images/week2/wk2_FTE_clip_image108_0004.png" /> is the proportion of the total variability  explained by the regression model, and it indicates how well the model fits the  data. 
+</p>
+<p>Read  the following examples on linear regression using R:</p>
+<p><a href="http://www.stat.columbia.edu/~martin/W2024/R4.pdf" target="_blank">http://www.stat.columbia.edu/~martin/W2024/R4.pdf</a></p>
+<p><a href="http://www.princeton.edu/~otorres/Regression101R.pdf" target="_blank">http://www.princeton.edu/~otorres/Regression101R.pdf</a></p>
+<p><a href="http://www.cyclismo.org/tutorial/R/linearLeastSquares.html" target="_blank">http://www.cyclismo.org/tutorial/R/linearLeastSquares.html</a></p>
+<p>Model  diagnostics for regression can be found at:</p>
+<p><a href="http://www.stat.columbia.edu/~martin/W2024/R7.pdf" target="_blank">http://www.stat.columbia.edu/~martin/W2024/R7.pdf</a></p>
+<h4><strong>References:</strong></h4>
+<p class="citation">Eckel,  S (2008) Linear Regression Approach, Assumptions and Diagnostic, USC.<br />
+  Retrieved from: <a href="http://www-hsc.usc.edu/~eckel/biostat2/notes/notes10.pdf">http://www-hsc.usc.edu/~eckel/biostat2/notes/notes10.pdf</a></p>
+<p class="citation">Lindquist,  A.M. (2009) Introduction to Statistics, course Notes. Columbia University. <br />
+  Retrieved from: <a href="http://www.stat.columbia.edu/~martin/W2024/R4.pdf">http://www.stat.columbia.edu/~martin/W2024/R4.pdf</a></p>
+<p class="citation">Mellor-Crummey,  J (2005) Linear Regression Models, Rice University.<br />
+  Retrieved from: <a href="http://www.cs.rice.edu/~johnmc/comp528/lecture-notes/Lecture9.pdf">http://www.cs.rice.edu/~johnmc/comp528/lecture-notes/Lecture9.pdf</a></p>
+<p class="citation">Torres-Reyna, O (2010) Getting Started in Linear  Regression using R. Princeton University. Retrieved from: <a href="http://www.princeton.edu/~otorres/Regression101R.pdf">http://www.princeton.edu/~otorres/Regression101R.pdf</a></p>
+<p class="citation">Shanker,  M (2006), Fundamentals of Business Statistics, Kent State University, <br />
+  Retrieved from: <a href="http://www.personal.kent.edu/~mshanker/personal/Classes/f06/ch13_F06.pdf">http://www.personal.kent.edu/~mshanker/personal/Classes/f06/ch13_F06.pdf</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p></body>
+</html>

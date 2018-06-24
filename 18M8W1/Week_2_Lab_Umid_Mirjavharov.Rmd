@@ -1,0 +1,221 @@
+---
+title: "Umid Mirjavharov<br>
+MSDS - 660 Statistical Methods and<br> 
+Experimental Design<br>"
+output: html_notebook
+---
+<h2>Week 2: Boston Housing Data Set </h2> 
+23 May 2018
+
+
+<h4>Use the Boston housing data set from MASS package (or a similar data set (housing) with a more recent data, and link to the data source)</h4>
+
+Describe your data set such as what is this data set about? How many observations? How many variables? etc.,What are those variables?
+
+Boston data set is a data set about Housing values in suburbs of Boston. It has 506 obervations and 14 variables. 
+
+Variables are: 
+
+crime- per capita crime rate y town, zn- poroportion of residential land zoned for lots over 25,000 sq.ft., indus- proportion of non-retail business acres per town, chas - Charles River dummy variable (= 1 if tract bounds river; 0 otherwise), nox- nitrogen oxides concentration (parts per 10 million), rm - average number of rooms per dwelling, age- proportion of owner-occupied units built prior to 1940, dis- weighted mean of distances to five Boston employment centres, rad - index of accessibility to radial highways, tax - full-value property-tax rate per \$10,000, ptratio - pupil-teacher ratio by town, black - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town, lstat - lower status of the population (percent), medv - median value of owner-occupied homes in \$1000s.
+
+```{r}
+library(MASS)
+str(Boston)
+```
+
+```{r}
+head(Boston)
+```
+
+Perform data exploration by plotting the graph(s), the distribution, and so on.  Then, interpret them.
+
+```{r}
+plot(Boston)
+```
+Summary
+
+```{r}
+summary(Boston)
+```
+
+Zn (proportion of residential land zoned for lots over 25,000 sq.ft) and chas (Charles River dummy variable (= 1 if tract bounds river; 0 otherwise) variables may have data errors or missing data. Let's see
+
+```{r}
+summary(Boston$zn)
+```
+There are so many 0.0s , which means towns do not have lots over 25,000 sq.ft.
+```{r}
+sort(Boston$zn)
+```
+
+
+Chas variable
+
+```{r}
+summary(Boston$chas)
+```
+
+This variable is categorical (= 1 if tract bounds river; 0 otherwise)
+```{r}
+sort(Boston$chas)
+```
+
+Some randomly chosen distributions
+
+Crime rate data distribution
+
+```{r}
+plot(density(Boston$crim,na.rm=TRUE))
+```
+Age distribution
+
+```{r}
+plot(density(Boston$age,na.rm=TRUE))
+```
+
+Tax distribution
+```{r}
+plot(density(Boston$tax,na.rm=TRUE))
+```
+
+Perform pairwise scatterplots and describe your findings, such as which pairs show positive correlation, negative correlation, or no correlation?
+
+Correlation of variables
+
+```{r}
+cor(Boston)
+```
+
+For this assignment, select one independent (a predictor or X variable) and one dependent variable (a response or Y variable). Explain the objective of selecting these variables. Do the scatter plot of the chosen variables.
+
+I am picking 4 variables: Room, agae, tax and median value of the home 
+
+```{r}
+Boston_4 <- subset(Boston, select = c("rm", "age", "tax", "medv"))
+plot(Boston_4)
+```
+
+Now, I am picking 2 variables out of 4, (age and median home value). I thought it would be good idea to see how age and median value of the house plays out in the data set. 
+
+Scatter plot of age and median value of the houses
+```{r}
+Boston_5 <- subset(Boston, select = c("age", "medv"))
+plot(Boston_5, main = "Age vs Median value of owner-occupied homes",
+     xlab = "Age of Home",
+     ylab = "Median Value")
+```
+
+
+```{r}
+summary(Boston_5)
+```
+There are many 100 year old houses
+```{r}
+sort(Boston_5$age)
+```
+
+Histogram of age
+```{r}
+hist(Boston$age)
+```
+
+
+Median value of the houses
+```{r}
+sort(Boston_5$medv)
+```
+
+Histogram of median value of the houses
+
+```{r}
+hist(Boston$medv)
+```
+
+Age density (skewed to the left)
+```{r}
+plot(density(Boston$age,na.rm=TRUE))
+```
+
+Density of median value (skewed to the right)
+```{r}
+plot(density(Boston$medv,na.rm=TRUE))
+```
+
+
+
+ Now, perform linear regression on variables that you chose from step 4 using 5% significance level (or 95% confidence level).
+State both the null and the alternative hypothesis:
+
+    H0: There is no relationship between age of the house and median value of the house
+
+    H1:There is some relationship between age and median value
+
+Show the linear regression command in R and the corresponding results.
+
+```{r}
+Boston_5.lm <- lm(age ~ medv, Boston_5) # save all outputs to an object
+#The model formula is = intercept_coefficient + coefficient_var1*var1
+```
+
+Calculate, and interpret parameters such as slope and coefficient of determination
+
+```{r}
+Boston_5.lm
+```
+
+Summarize the model fitting
+Coefficient of determination
+
+```{r}
+summary(Boston_5.lm)$r.squared # This is the coefficient of determination
+```
+
+Correlation coefficient. It is negative so it has negative linear correlation. 
+```{r}
+cor(Boston_5, 
+    use = "all.obs", # Specifies the handling of missing data. Options are all.obs (assumes no missing data - missing data will produce an error), complete.obs (listwise deletion), and pairwise.complete.obs (pairwise deletion)
+    method = "pearson" # Specifies the type of correlation. Options are pearson, spearman or kendall.
+      ) 
+```
+
+p-value is the probability the correlation is because of random chance. Low p-value means reject the null hypothesis.
+
+```{r}
+summary(Boston_5.lm)
+```
+
+```{r}
+t.test(Boston_5)
+```
+Explain how do you read the result. Do you accept or reject the null hypothesis? Why? Discuss.
+
+Answer: Since p-value is so low we can reject null hypothesis. 
+
+Is there any evidence of a linear relationship between the predictor and response variable that you chose? Explain.
+
+Answer: Correlation coefficient is negative so it has negative linear correlation.
+
+Verify the model assumptions (e.g. linearity, normality, variance) and specify which assumptions do not hold, if there is any. 
+
+Answers: All assumptions hold. 
+Age data are skewed to the left and median value to the right. 
+
+Normality test of age of the house. Since p value is low we can assume that data is normal 
+```{r}
+shapiro.test(Boston_5$age)
+```
+
+Normality test for median value. Here as well p value is low, so data is normal. 
+```{r}
+shapiro.test(Boston_5$medv)
+```
+
+Provide insights/findings from the exercise. Address any other concerns you might have.
+
+Answer: The analysis shows that age of the house and median value of the house has negative linear correlation. It means that as age of the house increases the median value of the house decreases and vice versa.   
+
+
+
+
+
+

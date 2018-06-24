@@ -1,0 +1,49 @@
+---
+title: "Paul Andrus<br>
+MSDS - 660 Statistical Methods and<br> 
+Experimental Design<br>"
+output: html_notebook
+---
+<h1>Week 2 Lecture: Simple Linear Regression</h1> 
+16 May 2018
+```{r}
+rm(list = ls()) # Removes all objects to prevent results from previous runs being carried over into new runs.
+graphics.off()  # Clears the graphic plots window
+cat("\014")     # Clears the console
+setwd("D:/Users/Paul/OneDrive/Regis/!MSDS660Stats/Wk1")
+
+# debug(utils:::unpackPkgZip) #Sometimes needed when "cannot move temporary installation" error. See https://stackoverflow.com/questions/34739681/unable-to-move-temporary-installation-when-installing-dependency-packages-in-r/44256437#44256437
+# install.packages('sampling')
+```
+<h2>Use the Boston housing data set from MASS package (or a similar data set (housing) with a more recent data, and link to the data source).
+
+You should at least include these following steps (you can organize these steps as appropriated):</h2>
+
+<h3>1) Describe your data set such as what is this data set about? How many observations? How many variables? etc.,What are those variables?</h3>
+
+<h3>2) Perform data exploration by plotting the graph(s), the distribution, and so on.  Then, interpret them.</h3>
+
+<h3>3) Perform pairwise scatterplots and describe your findings, such as which pairs show positive correlation, negative correlation, or no correlation?</h3>
+
+<h3>4) For this assignment, select one independent (a predictor or X variable) and one dependent variable (a response or Y variable). Explain the objective of selecting these variables. Do the scatter plot of the chosen variables.</h3>
+
+<h3> Now, perform linear regression on variables that you chose from step 4 using 5% significance level (or 95% confidence level).</h3>
+
+<h3>5) State both the null and the alternative hypothesis:
+
+    H0: 
+
+    H1:
+    
+</h3>
+
+<h3>6) Show the linear regression command in R and the corresponding results.</h3>
+
+<h3>7) Explain how do you read the result. Do you accept or reject the null hypothesis? Why? Discuss.</h3>
+
+<h3>8) Is there any evidence of a linear relationship between the predictor and response variable that you chose? Explain.</h3>
+
+<h3>9) Verify the model assumptions (e.g. linearity, normality, variance) and specify which assumptions do not hold, if there is any</h3>
+
+<h3>10) Provide insights/findings from the exercise. Address any other concerns you might have.</h3>
+

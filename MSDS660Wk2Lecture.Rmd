@@ -1,0 +1,127 @@
+---
+title: "Paul Andrus<br>
+MSDS - 660 Statistical Methods and<br> 
+Experimental Design<br>"
+output: html_notebook
+---
+<h2>Week 2 Lecture: Simple Linear Regression</h2> 
+16 May 2018
+<style>
+  p {
+    text-indent: 30pt;
+  }
+</style>
+```{r}
+rm(list = ls()) # Removes all objects to prevent results from previous runs being carried over into new runs.
+graphics.off()  # Clears the graphic plots window
+cat("\014")     # Clears the console
+getwd()
+
+# debug(utils:::unpackPkgZip) #Sometimes needed when "cannot move temporary installation" error. See https://stackoverflow.com/questions/34739681/unable-to-move-temporary-installation-when-installing-dependency-packages-in-r/44256437#44256437
+# install.packages('MASS')
+
+library(MASS)# https://cran.r-project.org/web/packages/MASS/MASS.pdf
+
+```
+
+<h3>Investigate the relationship between two numerical variables graphically (e.g. scatter diagrams)</h3>
+
+<p>Let's use MASS package Aids2 data set. "Data on patients diagnosed with AIDS in Australia before 1 July 1991." Because you have had or will have MSDS-640 Ethics, Privacy, and Social Justice, "Note: This data set has been slightly jittered as a condition of its release, to ensure patient confidentiality."</p>
+
+```{r}
+head(Aids2)
+```
+
+```{r}
+str(Aids2)
+```
+
+<p>Aids2\$diag and Aids2\$death look like good candidates for the sake of illustration.
+<ul>
+<li>diag = (Julian) date of diagnosis.</li>
+<li>death = (Julian) date of death or end of observation</li>
+</ul>
+
+</p>
+
+```{r}
+plot(Aids2$diag,                                 # X coord
+     Aids2$death,                                # Y coord
+     main = "Diagnosis vs Death",                # Title
+     sub = "Australian AIDS deaths before 1991", #Subtitle
+     xlab = "Diagnosis",                              # X label
+     ylab = "Death",                           #Y label
+     asp = 0.5                                     # Y : X Aspect ratio
+                                                   # < 1 stretches horizontally
+     )
+```
+
+
+
+<h3>Use linear regression to fit a line to the observations</h3>
+
+<h4>Remove non-deaths</h4>
+<p>The horizontal line of data points represent patients who were still alive on the ending date. Patients alive at the end of the study represent open-ended or ambiguous data. Little conclusions could be drawn from these data points. First, determine the ending date of the study:</p>
+```{r}
+summary(Aids2) # ID maxvalue = 11504
+```
+
+<h4>Create working subset</h4>
+<p>Note that there is no point (11504, 11504). This eliminates a step; putting deaths back in that happened on the last study day.</p>
+```{r}
+Aids3 <- subset(Aids2, select = c(diag, death)) # Many ways to do this
+Aids3 <- Aids3[Aids3$death != 11504,]
+summary(Aids3)
+```
+<h4>Perform linear regression</h4>
+```{r}
+Aids3.lm <- lm(death ~ diag, Aids3) # save all outputs to an object
+#The model formula is = intercept_coefficient + coefficient_var1*var1
+```
+
+<h3>Calculate, and interpret parameters such as slope and coefficient of determination</h3>
+```{r}
+Aids3.lm
+
+```
+<p>Why is the Y-intercept so low? Shouldn't it be around 8500?</p>
+<h3>Summarize the model fitting</h3>
+<h4>Coefficient of determination</h4>
+```{r}
+summary(Aids3.lm)$r.squared # This is the coefficient of determination
+```
+<h4>Correlation coefficient</h4>
+<p>Correlation coefficient is a standard measurement of association or relationship between 2 variables. Typically, the symbol &rho; (rho) denotes the population correlation (from the population data) and r is the sample correlation. Please keep in mind that correlation or association is not causation. As a reminder, regression is used to predict Y from X using a linear rule. Correlation describes how good the relationship is.</p>
+```{r}
+cor(Aids3, 
+    use = "all.obs", # Specifies the handling of missing data. Options are all.obs (assumes no missing data - missing data will produce an error), complete.obs (listwise deletion), and pairwise.complete.obs (pairwise deletion)
+    method = "pearson" # Specifies the type of correlation. Options are pearson, spearman or kendall.
+      ) 
+```
+<p>p-value is the probability the correlation is because of random chance. Low p-value means reject the null hypothesis.</p>
+
+```{r}
+summary(Aids3.lm)
+```
+
+<p>Let's see what perfect correlation looks like:</p>
+```{r}
+x <- c(1, 2, 3)
+y <- c(1, 2, 3)
+perfect <-cbind(x, y)
+cor(perfect, method = "pearson")
+perfect.lm <- lm(x ~ y, data.frame(perfect)) # lm requires a data frame
+summary(perfect.lm)
+```
+<h2>Now for the homework</h2>
+```{r}
+plot(Boston)
+```
+<p>That's pretty messy. For this exercise, pick four variables.</p>
+
+```{r}
+Boston_4 <- subset(Boston, select = c("medv", "crim", "age", "ptratio"))
+plot(Boston_4)
+```
+<p>Maybe don't pick those four.</p>
+

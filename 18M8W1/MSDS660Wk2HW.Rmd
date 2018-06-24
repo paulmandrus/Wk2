@@ -1,0 +1,128 @@
+---
+title: "Josh Butch<br> MSDS660: Statistical Methods and Experimental Design<br>"
+output:
+  html_notebook: default
+  html_document: default
+---
+<h2>Week 2: Simple Linear Regression</h2> 
+23 May 2018
+```{r}
+rm(list = ls()) # Removes all objects to prevent results from previous runs being carried over into new runs.
+graphics.off()  # Clears the graphic plots window
+cat("\014")     # Clears the console
+# setwd("C:/Users/Josh/Desktop/MSDS660 StatMethExpDes/Week 2/")
+getwd()
+
+# debug(utils:::unpackPkgZip) #Sometimes needed when "cannot move temporary installation" error. See https://stackoverflow.com/questions/34739681/unable-to-move-temporary-installation-when-installing-dependency-packages-in-r/44256437#44256437
+
+library(MASS)# https://cran.r-project.org/web/packages/MASS/MASS.pdf
+```
+
+<h3>Investigate the relationship between two numerical variables graphically (e.g. scatter diagrams)</h3>
+
+In the MASS package we'll use the Boston data set - "Housing Values in Suburbs of Boston." It consists of 506 rows and 14 columns. The column name and description is below:
+
+crim - per capita crime rate per town<br>
+zn - proportion of residential land zoned for lots over 25,000 sq.ft.<br>
+indus - proportion of non-retail business acres per town.<br>
+chas - Charles River dummy variable (= 1 if tract bounds river; 0 otherwise).<br>
+nox - nitrogen oxides concentration (parts per 10 million).<br>
+rm - average number of rooms per dwelling.<br>
+age - proportion of owner-occupied units built prior to 1940.<br>
+dis - weighted mean of distances to five Boston employment centres.<br>
+rad - index of accessibility to radial highways.<br>
+tax - full-value property-tax rate per \$10,000.<br>
+ptratio - pupil/teacher ratio by town.<br>
+black - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town.<br>
+lstat - lower status of the population (percent).<br>
+medv - median value of owner-occupied homes in \$1000s<br>
+
+Let's take a look at the different variables and how they correlate to one another.
+```{r}
+plot(Boston)
+```
+Now check the head and tail of the dataset to make sure there are no anomalies.
+```{r}
+head(Boston)
+```
+```{r}
+tail(Boston)
+```
+
+Check the format of each variable.
+```{r}
+str(Boston)
+```
+
+Boston\$rm and Boston\$medv are both numerical variables that you would expect to be related
+
+rm = avg number of rooms per dwelling<br>
+medv = median value of owner occupied homes
+
+```{r}
+plot(Boston$medv,                                 # X coord
+     Boston$rm,                             # Y coord
+     main = "Suburban Boston Housing Analysis", # Title
+     sub = "How # of rooms affects median home values", # Subtitle
+     xlab = "Median Value",              # X label
+     ylab = "Avg Rooms per House",       # Y label
+     asp = 0                                    # Y : X Aspect ratio
+                                                  # < 1 stretches horizontally
+     )
+```
+
+After examining this plot I can definitely see the outline of a correlation; however, included are many outliers as one would expect in the real estate market (i.e. more valuable home with fewer rooms and vice versa)
+
+<h3>Use linear regression to fit a line to the observations</h3>
+
+```{r}
+summary(Boston) 
+```
+
+<h4>Create working subset</h4>
+Create a working subset to perform the regression on as to not affect the original data set.
+```{r}
+BostonSS <- subset(Boston, select = c(medv, rm)) # Many ways to do this
+summary(BostonSS)
+```
+<h4>Perform linear regression</h4>
+```{r}
+BostonSS.lm <- lm(medv ~ rm, Boston) # save all outputs to an object
+#The model formula is = intercept_coefficient + coefficient_var1*var1
+```
+
+<h3>Calculate, and interpret parameters such as slope and coefficient of determination</h3>
+```{r}
+BostonSS.lm
+
+```
+<h3>Summarize the model fitting</h3>
+<h4>Coefficient of determination</h4>
+```{r}
+summary(BostonSS.lm)$r.squared # This is the coefficient of determination
+```
+<h4>Correlation coefficient</h4>
+Correlation coefficient is a standard measurement of association or relationship between 2 variables. Typically, the symbol [rho] denotes the population correlation (from the population data) and r is the sample correlation. Please keep in mind that correlation or association is not causation. As a reminder, regression is used to predict Y from X using a linear rule. Correlation describes how good the relationship is.
+```{r}
+cor(BostonSS, 
+    use = "all.obs", # Specifies the handling of missing data. Options are all.obs (assumes no missing data - missing data will produce an error), complete.obs (listwise deletion), and pairwise.complete.obs (pairwise deletion)
+    method = "pearson" # Specifies the type of correlation. Options are pearson, spearman or kendall.
+      ) 
+```
+p-value is the probability the correlation is because of random chance. Low p-value means reject the null hypothesis.
+
+```{r}
+summary(BostonSS.lm)
+```
+
+Let's see what perfect correlation looks like:
+```{r}
+x <- c(1, 2, 3)
+y <- c(1, 2, 3)
+perfect <-cbind(x, y)
+cor(perfect, method = "pearson")
+perfect.lm <- lm(x ~ y, data.frame(perfect)) # lm requires a data frame
+summary(perfect.lm)
+```
+
+

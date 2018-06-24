@@ -1,0 +1,152 @@
+---
+title: "<h3>MSDS660 - Week 2: Simple Linear Regression<br></h3>"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+---
+<h4>Christy Pearson<br>May 21, 2018</h4>
+<br>
+<h5>For this week's assignment we will be using the Boston housing dataset from the MASS package. We need to cover the following steps (in any order):
+1. Describe the dataset? <br>
+2. Perform EDA <br>
+3. Perform pairwise scatterplots <br>
+4. Independent vs Dependent variable plot of choice <br>
+5. State both Ho and Ha <br>
+6. Show the linear regression <br>
+7) Explain how to read the results <br></h5>
+<br>
+Preparing the current environment
+```{r}
+rm(list = ls()) # Prevents results from previous runs being carried over into new runs.
+graphics.off()  # Clears the graphic plots window
+cat("\014")     # Clears the console
+
+setwd("C:/Users/Creat/OneDrive/Documents/MSDS660/Week 2")
+getwd()
+```
+Package Installations
+```{r}
+# https://stackoverflow.com/questions/34739681/unable-to-move-temporary-installation-when-installing-dependency-packages-in-r/44256437#44256437
+# Sometimes needed when "cannot move temporary installation" error
+#debug(utils:::unpackPkgZip) 
+
+library(MASS)# https://cran.r-project.org/web/packages/MASS/MASS.pdf
+```
+Simple Linear Regression Exercise:<br><br>
+
+1) Describe your data set
+dataset: Boston from package MASS
+variables:
+   CRIM - per capita crime rate by town
+   ZN - proportion of residential land zoned for lots over 25,000 sq.ft.
+   INDUS - proportion of non-retail business acres per town.
+   CHAS - Charles River dummy variable (1 if tract bounds river; 0 otherwise)
+   NOX - nitric oxides concentration (parts per 10 million)
+   RM - average number of rooms per dwelling
+   AGE - proportion of owner-occupied units built prior to 1940
+   DIS - weighted distances to five Boston employment centres
+   RAD - index of accessibility to radial highways
+   TAX - full-value property-tax rate per $10,000
+   PTRATIO - pupil-teacher ratio by town
+   B - 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
+   LSTAT - % lower status of the population
+   MEDV - Median value of owner-occupied homes in $1000's
+number of observations expected: 506
+documentation at https://www.cs.toronto.edu/~delve/data/boston/bostonDetail.html
+```{r}
+head(Boston)
+```
+
+```{r}
+str(Boston)
+```
+```{r}
+summary(Boston)
+```
+
+2) EDA by plotting the graphs, the distributions and so on.  Then interpret.
+
+Let's look at variable: medv
+```{r}
+attach(Boston)
+boxplot(indus, col="blue", 
+        main="MASS package BOSTON dataset",
+        xlab="Variable: indus", 
+        ylab="Proportion of non-retail business acres per town")
+```
+```{r}
+boxplot(nox, col="red",
+        main="MASS package BOSTON dataset",
+        xlab="Variable: nox", 
+        ylab="Nitric oxides concentration (parts per 10 million)")
+```
+
+Now let's look at how these two variable interact with each other.
+Looking at scatterplots: indus vs nox
+```{r}
+plot(indus, nox,
+     main="MASS package BOSTON dataset",
+     xlab="Variable: indus",
+     ylab="Variable: nox")
+```
+Rough interpretation of this graph, the lower values of indus also have a lower value for nox.  However, there is something odd that happens at indus = 18 that results in a wide range of nox values.
+
+
+3) Perform pairwise scatterplots
+```{r}
+pairs(Boston)
+```
+That's really hard to understand, let's break this down a bit
+```{r}
+pairs(~crim+zn+indus+chas+nox,data=Boston)
+```
+```{r}
+pairs(~ rm+age+dis+rad+tax,data=Boston)
+```
+```{r}
+pairs(~ ptratio+lstat+medv,data=Boston)
+```
+The smaller plots are easier to look at and they don't represent all of the possible pariings for this dataset, but for our exercises this week we have enough to work with.
+For example, the variables lsat and medv show a negative correlation while the variables indus and nos show a positive corrleation. Finally, the variables chas and zn is an example of no correlation.
+
+4) Independent vs Dependent variable plot of choice
+Let's stick with indus and nox as our two variables, here's the plot again
+```{r}
+plot(indus, nox,
+     main="MASS package BOSTON dataset",
+     xlab="Variable: indus",
+     ylab="Variable: nox")
+```
+Linear regression
+Hypothesis statements:
+Ho: There is no relationship between indus and nox, meaning that as indus increases, there is no relationship to the values for nox.
+Ha: A relationship does exist between indus and nox, meaning that as indus increases, the values for nox increase too.
+Calculate the regression
+```{r}
+boston.lm <- lm(nox ~ indus, Boston)
+```
+Plot indus vs nox again and add the lm line this time
+```{r}
+plot(indus, nox,
+     main="MASS package, BOSTON dataset",
+     xlab="Variable: indus",
+     ylab="Variable: nox", col="blue")
+abline(boston.lm, col="red")
+```
+According to this version fot ehscatter plot, there is a positive relationship between indus and nox.  Let's look at the numbers now.
+```{r}
+boston.lm
+```
+The y-intercept is .4110 and the slop of the lm is .0129.  Not much of a slope
+```{r}
+summary(boston.lm)
+```
+The p-value for boston.lm is really low and the assignment said to assume a level of significance of .05. Since p-value < level of signficance, we should reject the null hypothesis(Ho). So, we accept Ha, meaning that there is a realtionship between indus and nox.
+
+Let's see how strong that realtionship is with cor() function
+```{r}
+vars <-cbind(indus,nox)
+cor(vars, use = "all.obs", method = "pearson")
+```
+With a correlation coefficient of .7636, this means that the relationship between indus and nox is fairly strong.
